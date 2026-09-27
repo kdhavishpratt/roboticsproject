@@ -1,0 +1,1546 @@
+<title>Seating the micro:bit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+  :root {
+    --ground: #F2F4F3;
+    --surface: #FFFFFF;
+    --ink: #18201D;
+    --muted: #55615C;
+    --line: #D6DDD9;
+    --accent: #D8660B;
+    --accent-ink: #A34B03;
+    --gold: #B8901B;
+    --ok: #2F7A4B;
+    --ok-bg: #E4F2E9;
+    --warn: #A33A1F;
+    --warn-bg: #FBE9E3;
+    --plate: #FFFFFF;
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #111513;
+      --surface: #1A201D;
+      --ink: #E5ECE8;
+      --muted: #9BA9A2;
+      --line: #2E3834;
+      --accent: #F08A3A;
+      --accent-ink: #F5A565;
+      --gold: #DDB548;
+      --ok: #7BCB97;
+      --ok-bg: #16291E;
+      --warn: #F29A80;
+      --warn-bg: #321A13;
+      --plate: #F4F6F5;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #111513;
+    --surface: #1A201D;
+    --ink: #E5ECE8;
+    --muted: #9BA9A2;
+    --line: #2E3834;
+    --accent: #F08A3A;
+    --accent-ink: #F5A565;
+    --gold: #DDB548;
+    --ok: #7BCB97;
+    --ok-bg: #16291E;
+    --warn: #F29A80;
+    --warn-bg: #321A13;
+    --plate: #F4F6F5;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font: 16px/1.6 var(--body);
+    padding-inline: 16px;
+    padding-block: 32px 64px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 48px; }
+
+  header { display: grid; gap: 12px; }
+  .eyebrow {
+    font: 500 12px/1 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+  h1 {
+    font: 800 clamp(30px, 6vw, 44px)/1.08 var(--display);
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h2 {
+    font: 700 22px/1.2 var(--display);
+    margin: 0;
+    text-wrap: balance;
+  }
+  p { margin: 0; max-width: 65ch; }
+  .lede { color: var(--muted); font-size: 17px; }
+
+  figure { margin: 0; display: grid; gap: 10px; }
+  .plate {
+    background: var(--plate);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    display: grid;
+    place-items: center;
+  }
+  .plate img { display: block; max-width: 100%; height: auto; }
+  figcaption { font-size: 14px; color: var(--muted); }
+
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: center; }
+  .hero .plate img { max-height: 440px; }
+  .rule { display: grid; gap: 14px; }
+  .rule-box {
+    border-left: 4px solid var(--accent);
+    padding: 4px 0 4px 16px;
+    display: grid;
+    gap: 6px;
+  }
+  .rule-box strong { font: 700 19px/1.3 var(--display); }
+  @media (max-width: 640px) { .hero { grid-template-columns: 1fr; } }
+
+  section { display: grid; gap: 18px; }
+
+  ol.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: s; }
+  ol.steps li {
+    counter-increment: s;
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+  }
+  ol.steps li:last-child { border-bottom: 1px solid var(--line); }
+  ol.steps li::before {
+    content: counter(s);
+    font: 800 20px/1 var(--display);
+    color: var(--accent-ink);
+    width: 40px; height: 40px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    display: grid; place-items: center;
+  }
+  .step { display: grid; gap: 4px; }
+  .step b { font-weight: 600; }
+  .step span { color: var(--muted); }
+  .pin {
+    font: 500 13px/1 var(--mono);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2px 6px;
+    white-space: nowrap;
+  }
+  .gold { color: var(--gold); font-weight: 600; }
+
+  .checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .check { border-radius: 10px; padding: 18px; display: grid; gap: 10px; align-content: start; }
+  .check.ok { background: var(--ok-bg); }
+  .check.bad { background: var(--warn-bg); }
+  .check h3 { margin: 0; font: 700 16px/1.2 var(--display); }
+  .check.ok h3 { color: var(--ok); }
+  .check.bad h3 { color: var(--warn); }
+  .check ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+  @media (max-width: 640px) { .checks { grid-template-columns: 1fr; } }
+
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 24px;
+    margin: 0; padding: 0; list-style: none;
+  }
+  .legend li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+  .legend .n {
+    font: 700 13px/24px var(--mono);
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #1FA83A; color: #fff; text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .legend .hot { font-weight: 600; }
+  @media (max-width: 520px) { .legend { grid-template-columns: 1fr; } }
+
+  .note {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .note b { color: var(--ink); }
+  .part {
+    font: 500 12px/1 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-top: 2px solid var(--ink);
+    padding-top: 14px;
+  }
+  .expect { color: var(--ok); font-weight: 600; }
+  .code {
+    position: relative;
+    background: #151B18;
+    color: #DCE6E0;
+    border-radius: 10px;
+    overflow-x: auto;
+  }
+  .code pre { margin: 0; padding: 18px 18px 18px; font: 500 13.5px/1.6 var(--mono); }
+  .code .c { color: #8FA39A; }
+  .code .k { color: #F5A565; }
+  .code .n { color: #DDB548; }
+  .copy {
+    position: absolute; top: 10px; right: 10px;
+    font: 600 13px/1 var(--body);
+    color: #151B18; background: #F5A565;
+    border: 0; border-radius: 6px; padding: 8px 12px; cursor: pointer;
+  }
+  .copy:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { text-align: left; padding: 12px 16px; vertical-align: top; border-top: 1px solid var(--line); }
+  thead th { border-top: 0; font: 600 12px/1.2 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  td:first-child { font-weight: 600; width: 42%; }
+  .danger td { background: var(--warn-bg); }
+  .danger td:first-child { color: var(--warn); }
+  .callout {
+    border: 2px solid var(--accent);
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: grid;
+    gap: 6px;
+  }
+  .callout strong { font: 700 18px/1.3 var(--display); color: var(--accent-ink); }
+  .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 560px) { .gallery { grid-template-columns: 1fr; } }
+  .swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 560px) { .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .swatch { display: grid; justify-items: center; gap: 8px; padding: 14px 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); text-align: center; font-size: 14px; }
+  .eyes { display: flex; gap: 10px; }
+  .eye { width: 28px; height: 28px; border-radius: 50%; border: 3px solid #C9D0CC; }
+  footer { font-size: 13px; color: var(--muted); }
+  footer a { color: var(--accent-ink); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">uHandbit · micro:bit V2 · getting started</div>
+    <h1>Seating the micro:bit, moving a finger, waving the hand</h1>
+    <p class="lede">The micro:bit is the brain of your robotic hand. Part 1 shows how to plug it into the expansion board. Part 2 takes you from power-on to one finger bending when you press a button. Part 3 builds the waving-hand program on your Mac and loads it onto the micro:bit. Part 4 makes a fist and opens the hand. Part 5 counts from 0 to 5 on the fingers. Part 6 plays rock, paper, scissors. Part 7 closes and opens the hand when you clap. Part 8 connects the glowing ultrasonic sensor. Part 9 controls the hand from your phone through an ESP32. Parts 10 and 11 are research notes for driving the servos from the ESP32 without the micro:bit (not tested yet).</p>
+  </header>
+
+  <div class="hero">
+    <figure>
+      <div class="plate"><img src="__IMG10__" alt="A micro:bit V2 with its LED grid and A/B buttons facing the viewer, and an orange arrow pointing down into the long black slot on the white expansion board." width="866" height="969"></div>
+      <figcaption>Hiwonder's installation diagram: LED side toward you, gold pins down, straight into the slot.</figcaption>
+    </figure>
+    <div class="rule">
+      <div class="rule-box">
+        <strong>LEDs and buttons face out</strong>
+        <p>The side with the 5×5 LED grid and the <b>A</b> and <b>B</b> buttons faces the same way as the board's chips and printed labels.</p>
+      </div>
+      <div class="rule-box">
+        <strong>Gold pins go in the slot</strong>
+        <p>The gold strip marked <span class="pin">0</span> <span class="pin">1</span> <span class="pin">2</span> <span class="pin">3V</span> <span class="pin">GND</span> goes down into the black connector.</p>
+      </div>
+      <div class="rule-box">
+        <strong>USB port ends up on top</strong>
+        <p>The small Micro-USB port is on the edge opposite the pins, so you can still plug in your Mac's cable once it's seated.</p>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Part 1: Plug in the micro:bit</h2>
+    <ol class="steps">
+      <li><div class="step"><b>Switch the power off.</b><span>Slide the power switch (<b>8</b> in the board photo below) to off. Never push the micro:bit in or pull it out while the power is on.</span></div></li>
+      <li><div class="step"><b>Hold the micro:bit by its sides.</b><span>LED grid and A/B buttons facing you, the <span class="gold">gold pins</span> pointing down. Try not to touch the gold pins.</span></div></li>
+      <li><div class="step"><b>Line it up with the black slot.</b><span>That's the long black connector (<b>3</b> in the board photo). Centre the micro:bit over it so it's square, not tilted.</span></div></li>
+      <li><div class="step"><b>Press straight down, firmly.</b><span>It's a tight fit, so steady pressure is normal. Stop when the gold strip has gone into the slot and the micro:bit doesn't move any further. Don't rock it side to side hard.</span></div></li>
+      <li><div class="step"><b>Check it's seated.</b><span>It should stand straight and not wobble or lift out when you tug gently.</span></div></li>
+      <li><div class="step"><b>Go on to Part 2.</b><span>Leave the power off for now. Part 2 below covers power, USB and your first program.</span></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Right way, wrong way</h2>
+    <div class="checks">
+      <div class="check ok">
+        <h3>Correct</h3>
+        <ul>
+          <li>LED grid and A/B buttons face the same way as the board's chips and labels</li>
+          <li>Gold pins hidden in the slot, not visible above it</li>
+          <li>Micro-USB port on the top edge, easy to reach</li>
+          <li>Power on shows lights on the board and the micro:bit</li>
+        </ul>
+      </div>
+      <div class="check bad">
+        <h3>Take it out and redo</h3>
+        <ul>
+          <li>You can see the micro:bit's back (the chips and "V2" print) facing out</li>
+          <li>It's tilted, or part of the gold strip is still showing</li>
+          <li>It rocks or pops out easily</li>
+          <li>Nothing lights up, or the servos twitch strangely: power off first, then reseat</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="part">Part 2</div>
+
+  <section>
+    <h2>Power up and connect to your Mac</h2>
+    <div class="callout">
+      <strong>The servos need the barrel-connector adapter</strong>
+      <p>The USB cable only powers the micro:bit. The finger and wrist motors get power only from the 6V adapter plugged into the round DC jack, with the power switch on. With USB alone you'll see the smiley, but nothing will move.</p>
+    </div>
+    <ol class="steps">
+      <li><div class="step"><b>Check the servo cables.</b><span>The hand's servo cables are plugged into the servo ports <b>1–6</b>. The power switch is still off.</span></div></li>
+      <li><div class="step"><b>Plug in the 6V adapter. This is required.</b><span>Into the board's round DC jack (<b>9</b>), and the adapter into the wall. Keep it plugged in whenever you want the hand to move.</span></div></li>
+      <li><div class="step"><b>Switch the power on.</b><span><span class="expect">You should see</span> lights on the board. The micro:bit may run its built-in demo, and the hand may twitch once. Both are normal, but keep your fingers clear.</span></div></li>
+      <li><div class="step"><b>Connect the USB cable.</b><span>Use a USB-C to Micro-USB <b>data</b> cable from your MacBook to the port on the <b>top edge of the micro:bit</b>. <span class="expect">You should see</span> a drive called <span class="pin">MICROBIT</span> in Finder's sidebar under Locations.</span></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Set up MakeCode</h2>
+    <ol class="steps">
+      <li><div class="step"><b>Open MakeCode in Chrome.</b><span>Go to <a href="https://makecode.microbit.org">makecode.microbit.org</a>, click <b>New Project</b> and name it <span class="pin">hand-test</span>.</span></div></li>
+      <li><div class="step"><b>Add the StartbitV2 extension.</b><span>Click the <b>gear icon</b>, then <b>Extensions</b>. Paste <span class="pin">https://github.com/Hiwonder/StartbitV2</span> into the search box and click the result.</span></div></li>
+      <li><div class="step"><b>Confirm it loaded.</b><span><span class="expect">You should see</span> a blue <b>StartbitV2</b> category in the block list.</span></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Load the test program</h2>
+    <p>Click <b>JavaScript</b> at the top of MakeCode. Delete everything there and paste this in:</p>
+    <div class="code">
+      <button class="copy" id="copy-code" type="button">Copy code</button>
+<pre><span class="k">StartbitV2</span>.startbit_Init()
+basic.showIcon(IconNames.Happy)
+
+<span class="c">// Button A: bend the index finger (servo 3)</span>
+input.onButtonPressed(Button.A, <span class="k">function</span> () {
+    <span class="k">StartbitV2</span>.setPwmServo(StartbitV2.startbit_servorange.range1, <span class="n">3</span>, <span class="n">0</span>, <span class="n">1000</span>)
+})
+<span class="c">// Button B: straighten it again</span>
+input.onButtonPressed(Button.B, <span class="k">function</span> () {
+    <span class="k">StartbitV2</span>.setPwmServo(StartbitV2.startbit_servorange.range1, <span class="n">3</span>, <span class="n">130</span>, <span class="n">1000</span>)
+})</pre>
+    </div>
+    <p class="note">In each servo line, the three numbers are <b>which servo</b> (3), <b>the angle</b> (0 = bent, 130 = straight, confirmed on your hand) and <b>how long the move takes</b> in milliseconds (1000 = 1 second).</p>
+    <ol class="steps">
+      <li><div class="step"><b>Click Download.</b><span>It's at the bottom left. When MakeCode offers to <b>Connect device</b>, follow the prompts and pick your micro:bit.</span></div></li>
+      <li><div class="step"><b>If connecting doesn't work, drag the file instead.</b><span>A <span class="pin">hand-test.hex</span> file lands in Downloads. Drag it onto the <span class="pin">MICROBIT</span> drive. The yellow light on the back of the micro:bit flashes while it copies.</span></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Test it</h2>
+    <ol class="steps">
+      <li><div class="step"><b>Look at the LED grid.</b><span><span class="expect">You should see</span> a smiley face.</span></div></li>
+      <li><div class="step"><b>Press A.</b><span>One finger bends slowly over one second.</span></div></li>
+      <li><div class="step"><b>Press B.</b><span>The finger straightens again.</span></div></li>
+    </ol>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What happens</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td>No MICROBIT drive appears</td><td>Your cable may be charge-only. Try a different cable.</td></tr>
+          <tr><td>Red squiggly lines in the code</td><td>The extension didn't load. Add StartbitV2 again from the gear menu.</td></tr>
+          <tr><td>Smiley shows, but no finger moves</td><td>The barrel-connector adapter isn't powering the board. Plug the 6V adapter into the round DC jack and check the switch is on. USB alone can't drive the motors. To check, unplug USB: if the smiley still appears, the board has power.</td></tr>
+          <tr><td>The micro:bit keeps beeping</td><td>The board is reporting low voltage (under 6.8V). Check the adapter, or charge the battery if your kit has one.</td></tr>
+          <tr><td>A different finger moves</td><td>That's fine. The servo numbers are just wired differently.</td></tr>
+          <tr class="danger"><td>A servo buzzes, strains or gets hot</td><td>Switch the power off right away and note which servo it was.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Which servo is which</h2>
+    <p>Each servo port number on the board is the number you use in code. This is the likely layout, based on other people's uHandbit projects. Your kit may be wired differently, so check it with the scan program below.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Servo port</th><th>Likely part</th><th>Safe angles</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Wrist</td><td>90–180</td></tr>
+          <tr><td>2</td><td>Thumb</td><td>0–140</td></tr>
+          <tr><td>3</td><td>Index finger</td><td>0–130</td></tr>
+          <tr><td>4</td><td>Middle finger</td><td>0–130</td></tr>
+          <tr><td>5</td><td>Ring finger</td><td>0–130</td></tr>
+          <tr><td>6</td><td>Little finger</td><td>0–130</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><b>Servo scan program.</b> Press A and each servo moves a little in turn (90° to 110°, safe for every joint) while its number shows on the LED grid. Write down what moves for each number.</p>
+    <div class="code">
+      <button class="copy" id="copy-scan" type="button">Copy code</button>
+<pre><span class="k">StartbitV2</span>.startbit_Init()
+
+<span class="c">// Wiggle servos 1-6 one at a time, showing the number</span>
+input.onButtonPressed(Button.A, <span class="k">function</span> () {
+    <span class="k">for</span> (let i = <span class="n">1</span>; i &lt;= <span class="n">6</span>; i++) {
+        basic.showNumber(i)
+        <span class="k">StartbitV2</span>.setPwmServo(StartbitV2.startbit_servorange.range1, i, <span class="n">90</span>, <span class="n">500</span>)
+        basic.pause(<span class="n">800</span>)
+        <span class="k">StartbitV2</span>.setPwmServo(StartbitV2.startbit_servorange.range1, i, <span class="n">110</span>, <span class="n">500</span>)
+        basic.pause(<span class="n">800</span>)
+    }
+    basic.showIcon(IconNames.Yes)
+})
+basic.showIcon(IconNames.Happy)</pre>
+    </div>
+  </section>
+
+  <div class="part">Part 3</div>
+
+  <section>
+    <h2>Deploy the waving-hand project from your Mac</h2>
+    <p>This time you build the program on your Mac with Microsoft's MakeCode command-line tool and copy it onto the micro:bit yourself, without the MakeCode website. Press <b>A</b> to wave the wrist and <b>B</b> to stop.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>You need</th><th>How to check</th></tr></thead>
+        <tbody>
+          <tr><td>Node.js</td><td>In Terminal, <span class="pin">node --version</span> prints a version number. If not, install it from nodejs.org.</td></tr>
+          <tr><td>The project folder</td><td><span class="pin">~/Documents/GitHub/robotics-hiwonder/waving-hand</span> with <span class="pin">main.ts</span>, <span class="pin">pxt.json</span> and <span class="pin">README.md</span></td></tr>
+          <tr><td>micro:bit on USB</td><td><span class="pin">MICROBIT</span> shows in Finder under Locations</td></tr>
+          <tr><td>6V adapter in the barrel jack</td><td>Power switch on, lights on the board</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>The program</h2>
+    <p>This is <span class="pin">waving-hand/main.ts</span>. It's the community waving-hand project converted to the StartbitV2 extension. The fingers hold still and servo 1 (the wrist) swings between 0° and 180°.</p>
+    <div class="code">
+      <button class="copy" id="copy-wave" type="button">Copy code</button>
+<pre>// uHandbit waving hand (micro:bit V2 + StartbitV2 extension)
+// Based on https://github.com/cloverdale-robotics-learning/waving-hand
+// Button A: start waving. Button B: stop.
+// The servos only move with the 6V adapter plugged into the barrel jack.
+
+let waving = false
+
+StartbitV2.startbit_Init()
+
+// Hold the thumb (servo 2) and fingers (servos 3-6) in place
+StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, 2, 0, 500)
+StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, 3, 130, 500)
+StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, 4, 130, 500)
+StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, 5, 130, 500)
+StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, 6, 130, 500)
+basic.showIcon(IconNames.Happy)
+
+input.onButtonPressed(Button.A, function () {
+    waving = true
+    basic.showArrow(ArrowNames.East)
+})
+
+input.onButtonPressed(Button.B, function () {
+    waving = false
+    basic.showIcon(IconNames.Happy)
+})
+
+// Swing the wrist (servo 1) back and forth while waving is on
+basic.forever(function () {
+    if (waving) {
+        StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, 1, 0, 500)
+        basic.pause(1000)
+        StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, 1, 180, 500)
+        basic.pause(1000)
+    } else {
+        basic.pause(100)
+    }
+})</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>Build and load it</h2>
+    <ol class="steps">
+      <li><div class="step"><b>Open Terminal and go to the project.</b><span>Paste the first line of the commands below and press Return.</span></div></li>
+      <li><div class="step"><b>Build it.</b><span>The second line compiles the program. The first build downloads the MakeCode toolchain and the StartbitV2 extension, so give it a few minutes. <span class="expect">You should see</span> <span class="pin">Build OK</span>, and a new file <span class="pin">built/binary.hex</span>.</span></div></li>
+      <li><div class="step"><b>Copy it onto the micro:bit.</b><span>The third line copies the file to the MICROBIT drive. The <span class="pin">-X</span> skips macOS's hidden metadata files, which the micro:bit doesn't need.</span></div></li>
+      <li><div class="step"><b>Wait for the restart.</b><span>The yellow light on the back flashes, the drive disappears, and then it comes back. <span class="expect">A successful load</span> leaves only <span class="pin">DETAILS.TXT</span> and <span class="pin">MICROBIT.HTM</span> on the drive. If <span class="pin">FAIL.TXT</span> appears, open it to read the error and copy the file again.</span></div></li>
+    </ol>
+    <div class="code">
+      <button class="copy" id="copy-cmds" type="button">Copy commands</button>
+<pre><span class="k">cd</span> ~/Documents/GitHub/robotics-hiwonder/waving-hand
+npx makecode build
+<span class="k">cp</span> -X built/binary.hex /Volumes/MICROBIT/</pre>
+    </div>
+    <p class="note"><b>Prefer the website?</b> In <a href="https://makecode.microbit.org">makecode.microbit.org</a>, choose <b>Import</b>, then <b>Import File</b>, and pick <span class="pin">built/binary.hex</span>. Or start a new project, add the StartbitV2 extension, paste the program into the JavaScript tab and click Download.</p>
+  </section>
+
+  <section>
+    <h2>Wave</h2>
+    <ol class="steps">
+      <li><div class="step"><b>Wait for the smiley.</b><span>About 2 seconds after power-on, the thumb and fingers move into place and a smiley appears.</span></div></li>
+      <li><div class="step"><b>Press A.</b><span>An arrow appears and the wrist swings back and forth once a second. Keep your hands clear.</span></div></li>
+      <li><div class="step"><b>Press B.</b><span>The smiley comes back and the wrist stops at the end of its current swing.</span></div></li>
+    </ol>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What happens</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pin">npx: command not found</span></td><td>Node.js isn't installed. Install it from nodejs.org, then open a new Terminal window.</td></tr>
+          <tr><td><span class="pin">No such file or directory</span> on the copy line</td><td>The micro:bit isn't connected. Plug it in, wait for MICROBIT in Finder, and run the copy line again.</td></tr>
+          <tr><td>"could not copy extended attributes" warning</td><td>Harmless. It happens with plain <span class="pin">cp</span> when the micro:bit restarts mid-copy. Use <span class="pin">cp -X</span> to avoid it.</td></tr>
+          <tr><td>Smiley shows, but pressing A doesn't move the wrist</td><td>Check the barrel adapter and power switch. If a different part moves, your wrist is on another port: change the <span class="pin">1</span> in the two wrist lines of main.ts, then build and copy again.</td></tr>
+          <tr class="danger"><td>The wrist buzzes, strains or hits something</td><td>Press B or switch the power off. Then make the swing smaller, for example 60 and 120 instead of 0 and 180, and build and copy again.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="part">Part 4</div>
+
+  <section>
+    <h2>Fist and open hand</h2>
+    <p>Press <b>A</b> and the hand closes into a fist. Press <b>B</b> and it opens. When closing, the fingers fold first and the thumb wraps over them. When opening, the thumb moves out of the way first so it doesn't catch. The wrist doesn't move.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Part</th><th>Fist</th><th>Open</th></tr></thead>
+        <tbody>
+          <tr><td>Fingers (servos 3–6)</td><td>0</td><td>130</td></tr>
+          <tr><td>Thumb (servo 2)</td><td>140</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>Confirmed on your hand:</b> A makes a fist and B opens it with these angles. If you ever rebuild the hand and the directions flip, swap the numbers in the four lines at the top of <span class="pin">main.ts</span>, then build and copy again.</p>
+  </section>
+
+  <section>
+    <h2>The program</h2>
+    <p>This is <span class="pin">fist-open/main.ts</span>. The four named numbers at the top control every position, so you only change them in one place.</p>
+    <div class="code">
+      <button class="copy" id="copy-fist" type="button">Copy code</button>
+<pre>// uHandbit fist and open hand (micro:bit V2 + StartbitV2 extension)
+// Button A: make a fist. Button B: open the hand.
+// Positions from the community uHandbit projects:
+//   fingers (servos 3-6): 0 = closed, 130 = open
+//   thumb (servo 2):    140 = closed,   0 = open
+// The servos only move with the 6V adapter plugged into the barrel jack.
+
+const FINGER_CLOSED = 0
+const FINGER_OPEN = 130
+const THUMB_CLOSED = 140
+const THUMB_OPEN = 0
+const MOVE_MS = 500
+
+function moveFingers(angle: number) {
+    for (let servo = 3; servo &lt;= 6; servo++) {
+        StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, servo, angle, MOVE_MS)
+    }
+}
+
+function moveThumb(angle: number) {
+    StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, 2, angle, MOVE_MS)
+}
+
+// Fist: fold the fingers first, then wrap the thumb over them
+function makeFist() {
+    basic.showIcon(IconNames.SmallSquare)
+    moveFingers(FINGER_CLOSED)
+    basic.pause(MOVE_MS + 200)
+    moveThumb(THUMB_CLOSED)
+}
+
+// Open: move the thumb out of the way first, then straighten the fingers
+function openHand() {
+    basic.showIcon(IconNames.Square)
+    moveThumb(THUMB_OPEN)
+    basic.pause(MOVE_MS + 200)
+    moveFingers(FINGER_OPEN)
+}
+
+StartbitV2.startbit_Init()
+openHand()
+
+input.onButtonPressed(Button.A, function () {
+    makeFist()
+})
+
+input.onButtonPressed(Button.B, function () {
+    openHand()
+})</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>Build, load and try it</h2>
+    <p>Same steps as Part 3, in the <span class="pin">fist-open</span> folder. The hand opens by itself as soon as the program starts, so keep your fingers clear when you copy it over.</p>
+    <div class="code">
+      <button class="copy" id="copy-fist-cmds" type="button">Copy commands</button>
+<pre><span class="k">cd</span> ~/Documents/GitHub/robotics-hiwonder/fist-open
+npx makecode build
+<span class="k">cp</span> -X built/binary.hex /Volumes/MICROBIT/</pre>
+    </div>
+    <ol class="steps">
+      <li><div class="step"><b>Wait for the restart.</b><span>The hand opens and a large square appears on the LED grid.</span></div></li>
+      <li><div class="step"><b>Press A.</b><span>A small square appears. The four fingers fold, then the thumb closes over them.</span></div></li>
+      <li><div class="step"><b>Press B.</b><span>The large square comes back. The thumb moves out, then the fingers straighten.</span></div></li>
+    </ol>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What happens</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td>A opens the hand and B closes it</td><td>Swap the values: <span class="pin">FINGER_CLOSED = 130</span>, <span class="pin">FINGER_OPEN = 0</span>, <span class="pin">THUMB_CLOSED = 0</span>, <span class="pin">THUMB_OPEN = 140</span>.</td></tr>
+          <tr><td>One finger goes the opposite way to the others</td><td>That servo is mounted the other way round. Note its number and ask for the program to handle it separately.</td></tr>
+          <tr><td>The thumb bumps into the fingers</td><td>Make the pause between the two moves longer, for example <span class="pin">basic.pause(MOVE_MS + 500)</span>.</td></tr>
+          <tr class="danger"><td>A servo buzzes or strains in the fist position</td><td>It's pushing against something. Press B, then use a smaller closed angle, for example 20 for the fingers or 120 for the thumb.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="part">Part 5</div>
+
+  <section>
+    <h2>Counting on fingers</h2>
+    <p>The hand starts as a fist with <b>0</b> on the LED grid. Press <b>A</b> to raise one more finger and <b>B</b> to lower the last one raised. The display always shows how many fingers are up.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Count</th><th>Finger raised</th><th>Servo</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Index</td><td>3</td></tr>
+          <tr><td>2</td><td>Middle</td><td>4</td></tr>
+          <tr><td>3</td><td>Ring</td><td>5</td></tr>
+          <tr><td>4</td><td>Little</td><td>6</td></tr>
+          <tr><td>5</td><td>Thumb</td><td>2</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>New idea in this program: lists.</b> <span class="pin">SERVOS</span>, <span class="pin">OPEN</span> and <span class="pin">CLOSED</span> hold one entry per finger in counting order. The count picks the entry, so position 0 is the index finger, servo 3, open at 130 and closed at 0. To count in a different order, change the order in all three lists the same way.</p>
+  </section>
+
+  <section>
+    <h2>The program</h2>
+    <p>This is <span class="pin">finger-counting/main.ts</span>.</p>
+    <div class="code">
+      <button class="copy" id="copy-count" type="button">Copy code</button>
+<pre>// uHandbit finger counting (micro:bit V2 + StartbitV2 extension)
+// Starts as a fist showing 0.
+// Button A: raise one more finger (count up to 5).
+// Button B: lower the last finger raised (count down to 0).
+// Angles confirmed on this hand:
+//   fingers (servos 3-6): 0 = closed, 130 = open
+//   thumb (servo 2):    140 = closed,   0 = open
+// The servos only move with the 6V adapter plugged into the barrel jack.
+
+const MOVE_MS = 400
+
+// Counting order: index, middle, ring, little finger, then thumb
+const SERVOS = [3, 4, 5, 6, 2]
+const OPEN = [130, 130, 130, 130, 0]
+const CLOSED = [0, 0, 0, 0, 140]
+
+let count = 0
+
+function setFinger(position: number, open: boolean) {
+    const angle = open ? OPEN[position] : CLOSED[position]
+    StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, SERVOS[position], angle, MOVE_MS)
+}
+
+// Start as a fist: fingers first, then the thumb over them
+StartbitV2.startbit_Init()
+for (let i = 0; i &lt; 4; i++) {
+    setFinger(i, false)
+}
+basic.pause(MOVE_MS + 200)
+setFinger(4, false)
+basic.showNumber(count)
+
+input.onButtonPressed(Button.A, function () {
+    if (count &lt; 5) {
+        setFinger(count, true)
+        count += 1
+        basic.showNumber(count)
+    } else {
+        // Already showing 5
+        basic.showIcon(IconNames.No)
+        basic.pause(500)
+        basic.showNumber(count)
+    }
+})
+
+input.onButtonPressed(Button.B, function () {
+    if (count &gt; 0) {
+        count -= 1
+        setFinger(count, false)
+        basic.showNumber(count)
+    } else {
+        // Already a fist
+        basic.showIcon(IconNames.No)
+        basic.pause(500)
+        basic.showNumber(count)
+    }
+})</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>Build, load and try it</h2>
+    <p>Same steps as before, in the <span class="pin">finger-counting</span> folder. The hand closes into a fist as soon as the program starts, so keep your fingers clear.</p>
+    <div class="code">
+      <button class="copy" id="copy-count-cmds" type="button">Copy commands</button>
+<pre><span class="k">cd</span> ~/Documents/GitHub/robotics-hiwonder/finger-counting
+npx makecode build
+<span class="k">cp</span> -X built/binary.hex /Volumes/MICROBIT/</pre>
+    </div>
+    <ol class="steps">
+      <li><div class="step"><b>Wait for the restart.</b><span>The hand closes into a fist and <b>0</b> appears.</span></div></li>
+      <li><div class="step"><b>Press A five times.</b><span>Index, middle, ring, little finger, then thumb go up, and the display counts 1 to 5. A sixth press shows an ✗ because you're already at 5.</span></div></li>
+      <li><div class="step"><b>Press B five times.</b><span>The fingers go down in reverse order, thumb first, back to 0. Another press at 0 shows an ✗.</span></div></li>
+    </ol>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What happens</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td>The wrong finger goes up for a number</td><td>Your servos are plugged into different ports. Put the right servo numbers in the <span class="pin">SERVOS</span> list.</td></tr>
+          <tr><td>The count on the display and the fingers don't match</td><td>Press B until the display shows 0, then count up again. The program restarts at 0 if you press the reset button on the back.</td></tr>
+          <tr class="danger"><td>A servo buzzes or strains</td><td>Press B to lower that finger or switch the power off, and note which count it happened at.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="part">Part 6</div>
+
+  <section>
+    <h2>Rock, paper, scissors</h2>
+    <p>Press <b>A</b>. The hand closes into a fist and the display counts down <b>3, 2, 1</b>. Then the hand shows a random pick, and you play yours at the same moment. Press A again for another round.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pick</th><th>Hand</th><th>LED grid</th></tr></thead>
+        <tbody>
+          <tr><td>Rock</td><td>Stays a fist</td><td>Small square</td></tr>
+          <tr><td>Paper</td><td>Thumb opens, then all four fingers</td><td>Big square</td></tr>
+          <tr><td>Scissors</td><td>Index and middle fingers up, the rest down</td><td>Scissors icon</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>New ideas in this program: random numbers and a lock.</b> <span class="pin">randint(0, 2)</span> picks 0, 1 or 2 at random, and the <span class="pin">if</span> / <span class="pin">else if</span> / <span class="pin">else</span> turns that number into a gesture. The <span class="pin">playing</span> flag ignores extra presses of A until the round is over, so the hand doesn't get two sets of moves at once. The micro:bit sits on the hand, so a button works better than shaking to start a round.</p>
+  </section>
+
+  <section>
+    <h2>The program</h2>
+    <p>This is <span class="pin">rock-paper-scissors/main.ts</span>.</p>
+    <div class="code">
+      <button class="copy" id="copy-rps" type="button">Copy code</button>
+<pre>// uHandbit rock, paper, scissors (micro:bit V2 + StartbitV2 extension)
+// Button A: count down 3, 2, 1, then show a random rock, paper or scissors.
+// Angles confirmed on this hand:
+//   fingers (servos 3-6): 0 = closed, 130 = open
+//   thumb (servo 2):    140 = closed,   0 = open
+// The servos only move with the 6V adapter plugged into the barrel jack.
+
+const FINGER_CLOSED = 0
+const FINGER_OPEN = 130
+const THUMB_CLOSED = 140
+const THUMB_OPEN = 0
+const MOVE_MS = 400
+
+const THUMB = 2
+const INDEX = 3
+const MIDDLE = 4
+const RING = 5
+const LITTLE = 6
+
+let playing = false
+
+function move(servo: number, angle: number) {
+    StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, servo, angle, MOVE_MS)
+}
+
+// Fist: fingers first, then the thumb over them
+function rock() {
+    move(INDEX, FINGER_CLOSED)
+    move(MIDDLE, FINGER_CLOSED)
+    move(RING, FINGER_CLOSED)
+    move(LITTLE, FINGER_CLOSED)
+    basic.pause(MOVE_MS + 200)
+    move(THUMB, THUMB_CLOSED)
+}
+
+// Open hand: thumb out of the way first, then the fingers
+function paper() {
+    move(THUMB, THUMB_OPEN)
+    basic.pause(MOVE_MS + 200)
+    move(INDEX, FINGER_OPEN)
+    move(MIDDLE, FINGER_OPEN)
+    move(RING, FINGER_OPEN)
+    move(LITTLE, FINGER_OPEN)
+}
+
+// Scissors: from a fist, raise only the index and middle fingers
+function scissors() {
+    move(INDEX, FINGER_OPEN)
+    move(MIDDLE, FINGER_OPEN)
+}
+
+StartbitV2.startbit_Init()
+rock()
+basic.showIcon(IconNames.Happy)
+
+input.onButtonPressed(Button.A, function () {
+    if (playing) {
+        return
+    }
+    playing = true
+
+    // Start every round from a fist, like a real game
+    rock()
+    basic.showNumber(3)
+    basic.pause(500)
+    basic.showNumber(2)
+    basic.pause(500)
+    basic.showNumber(1)
+    basic.pause(500)
+
+    const pick = randint(0, 2)
+    if (pick == 0) {
+        // Rock: already a fist
+        basic.showIcon(IconNames.SmallSquare)
+    } else if (pick == 1) {
+        paper()
+        basic.showIcon(IconNames.Square)
+    } else {
+        scissors()
+        basic.showIcon(IconNames.Scissors)
+    }
+
+    playing = false
+})</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>Build, load and play</h2>
+    <p>Same steps as before, in the <span class="pin">rock-paper-scissors</span> folder. The hand closes into a fist when the program starts.</p>
+    <div class="code">
+      <button class="copy" id="copy-rps-cmds" type="button">Copy commands</button>
+<pre><span class="k">cd</span> ~/Documents/GitHub/robotics-hiwonder/rock-paper-scissors
+npx makecode build
+<span class="k">cp</span> -X built/binary.hex /Volumes/MICROBIT/</pre>
+    </div>
+    <ol class="steps">
+      <li><div class="step"><b>Wait for the restart.</b><span>The hand makes a fist and a smiley appears.</span></div></li>
+      <li><div class="step"><b>Press A and play along.</b><span>Say "rock, paper, scissors" with the 3, 2, 1, and show your hand when the robot reveals its pick.</span></div></li>
+      <li><div class="step"><b>Play a few rounds.</b><span>Each round starts from a fist. Over many rounds you'll see all three picks about equally often.</span></div></li>
+    </ol>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What happens</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td>The same pick comes up a few times in a row</td><td>That's normal with random picks, just like flipping heads three times. Play more rounds.</td></tr>
+          <tr><td>Pressing A during a round does nothing</td><td>That's the lock. Wait until the pick is shown, then press again.</td></tr>
+          <tr><td>For scissors, the thumb gets in the way</td><td>Try a slightly smaller closed thumb angle, for example <span class="pin">THUMB_CLOSED = 120</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="part">Part 7</div>
+
+  <section>
+    <h2>Clap to grab</h2>
+    <p>Clap once and the hand closes into a fist. Clap again and it opens. The micro:bit V2's built-in microphone listens for loud sounds. After each move it ignores sounds for one second, so the motors' own whirring doesn't count as a clap.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Control</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td>Clap</td><td>Closes the hand if it's open, opens it if it's closed</td></tr>
+          <tr><td>Button A</td><td>Less sensitive, so it needs a louder clap. Shows the new level (up to 9).</td></tr>
+          <tr><td>Button B</td><td>More sensitive, so a quieter clap works. Shows the new level (down to 1).</td></tr>
+          <tr><td>LED grid</td><td>Big square = open, small square = fist</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>New ideas in this program: sound events and tuning.</b> <span class="pin">input.onSound(DetectedSound.Loud, ...)</span> runs code whenever the microphone hears something louder than the threshold. <span class="pin">setSoundThreshold</span> sets that threshold on the micro:bit's 0–255 scale, and the level buttons move it between 80 and 240. <span class="pin">closed = !closed</span> flips between fist and open on each clap.</p>
+  </section>
+
+  <section>
+    <h2>The program</h2>
+    <p>This is <span class="pin">clap-to-grab/main.ts</span>.</p>
+    <div class="code">
+      <button class="copy" id="copy-clap" type="button">Copy code</button>
+<pre>// uHandbit clap to grab (micro:bit V2 + StartbitV2 extension)
+// Clap once: the hand closes into a fist. Clap again: it opens.
+// Button A: less sensitive (needs a louder clap).
+// Button B: more sensitive (a quieter clap works).
+// Angles confirmed on this hand:
+//   fingers (servos 3-6): 0 = closed, 130 = open
+//   thumb (servo 2):    140 = closed,   0 = open
+// The servos only move with the 6V adapter plugged into the barrel jack.
+
+const FINGER_CLOSED = 0
+const FINGER_OPEN = 130
+const THUMB_CLOSED = 140
+const THUMB_OPEN = 0
+const MOVE_MS = 400
+
+// Ignore sounds for this long after a move, so the motors' own noise
+// doesn't count as a clap
+const QUIET_MS = 1000
+
+// Sensitivity level 1 (quiet claps work) to 9 (needs a very loud clap)
+let level = 5
+let closed = false
+let busy = false
+
+function thresholdFor(lvl: number) {
+    // Level 1 = 80, level 9 = 240 on the micro:bit's 0-255 sound scale
+    return 60 + lvl * 20
+}
+
+function move(servo: number, angle: number) {
+    StartbitV2.setPwmServo(StartbitV2.startbit_servorange.range1, servo, angle, MOVE_MS)
+}
+
+// Fist: fingers first, then the thumb over them
+function makeFist() {
+    for (let servo = 3; servo &lt;= 6; servo++) {
+        move(servo, FINGER_CLOSED)
+    }
+    basic.pause(MOVE_MS + 200)
+    move(2, THUMB_CLOSED)
+    basic.showIcon(IconNames.SmallSquare)
+}
+
+// Open: thumb out of the way first, then the fingers
+function openHand() {
+    move(2, THUMB_OPEN)
+    basic.pause(MOVE_MS + 200)
+    for (let servo = 3; servo &lt;= 6; servo++) {
+        move(servo, FINGER_OPEN)
+    }
+    basic.showIcon(IconNames.Square)
+}
+
+function showLevel() {
+    basic.showNumber(level)
+    basic.pause(300)
+    basic.showIcon(closed ? IconNames.SmallSquare : IconNames.Square)
+}
+
+StartbitV2.startbit_Init()
+input.setSoundThreshold(SoundThreshold.Loud, thresholdFor(level))
+openHand()
+
+input.onSound(DetectedSound.Loud, function () {
+    if (busy) {
+        return
+    }
+    busy = true
+    if (closed) {
+        openHand()
+    } else {
+        makeFist()
+    }
+    closed = !closed
+    basic.pause(QUIET_MS)
+    busy = false
+})
+
+input.onButtonPressed(Button.A, function () {
+    if (level &lt; 9) {
+        level += 1
+    }
+    input.setSoundThreshold(SoundThreshold.Loud, thresholdFor(level))
+    showLevel()
+})
+
+input.onButtonPressed(Button.B, function () {
+    if (level &gt; 1) {
+        level -= 1
+    }
+    input.setSoundThreshold(SoundThreshold.Loud, thresholdFor(level))
+    showLevel()
+})</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>Build, load and clap</h2>
+    <p>Same steps as before, in the <span class="pin">clap-to-grab</span> folder. The hand opens when the program starts.</p>
+    <div class="code">
+      <button class="copy" id="copy-clap-cmds" type="button">Copy commands</button>
+<pre><span class="k">cd</span> ~/Documents/GitHub/robotics-hiwonder/clap-to-grab
+npx makecode build
+<span class="k">cp</span> -X built/binary.hex /Volumes/MICROBIT/</pre>
+    </div>
+    <ol class="steps">
+      <li><div class="step"><b>Wait for the restart.</b><span>The hand opens and a big square appears. Sensitivity starts at level 5.</span></div></li>
+      <li><div class="step"><b>Clap once, sharply, about 30 cm from the micro:bit.</b><span>The hand closes and a small square appears.</span></div></li>
+      <li><div class="step"><b>Wait a second, then clap again.</b><span>The hand opens. Claps within a second of a move are ignored on purpose.</span></div></li>
+    </ol>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What happens</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td>Nothing happens when you clap</td><td>Press B a few times to make it more sensitive, and clap closer to the micro:bit.</td></tr>
+          <tr><td>It moves when nobody clapped (talking, music, bumps)</td><td>Press A a few times to make it less sensitive.</td></tr>
+          <tr><td>It keeps opening and closing by itself</td><td>The motor noise is being heard as claps. Press A until it stops, or make <span class="pin">QUIET_MS</span> longer, for example 2000.</td></tr>
+          <tr><td>The sensitivity goes back to 5 after a restart</td><td>That's expected. The level isn't saved. Change <span class="pin">let level = 5</span> to keep a different starting level.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="part">Part 8</div>
+
+  <section>
+    <h2>The glowing ultrasonic sensor</h2>
+    <p class="callout"><strong>Correction: only socket 4 is I2C</strong><span>An earlier version of this page said sockets 4, 5 and 6 were all I2C and recommended socket 5. That was wrong. Use socket 4 for I2C sensors, and never plug a sensor into socket 6.</span></p>
+    <p>Hiwonder's glowing ultrasonic sensor measures distance like the plain one, but it talks to the micro:bit over the <b>I2C</b> bus and has a colored light in each eye. Hiwonder makes it in two shapes. Both work the same way.</p>
+    <div class="gallery">
+      <figure>
+        <div class="plate"><img src="__G1__" alt="Rectangular black glowing ultrasonic sensor, model HW-SR06, with both eyes lit blue." loading="lazy"></div>
+        <figcaption>Rectangular version (HW-SR06), eyes lit blue.</figcaption>
+      </figure>
+      <figure>
+        <div class="plate"><img src="__G5__" alt="Rounded black glowing ultrasonic sensor with both eyes lit blue." loading="lazy"></div>
+        <figcaption>Rounded version, eyes lit blue.</figcaption>
+      </figure>
+    </div>
+    <figure>
+      <div class="plate"><img src="__G8__" alt="Four robots using the glowing sensor, with eyes lit green, red and yellow, blue, and blue." loading="lazy"></div>
+      <figcaption>The eyes can show any color the program chooses: green, red, yellow, blue and more.</figcaption>
+    </figure>
+    <p class="note"><b>Lit eyes need a program.</b> In these photos a program has set the eye colors. Your sensor may stay dark until the micro:bit tells it which color to show. That only works once the micro:bit can talk to the sensor, so <b>dark eyes on their own don't prove the sensor has no power</b>. The I2C scan below is the reliable check.</p>
+  </section>
+
+  <section>
+    <h2>Colors in your distance meter</h2>
+    <p>When the <span class="pin">glowing-distance-meter</span> program is talking to the sensor, the eyes show how close things are:</p>
+    <div class="swatches">
+      <div class="swatch"><div class="eyes"><span class="eye" style="background:#22C55E"></span><span class="eye" style="background:#22C55E"></span></div><b>Green</b><span>More than 30 cm</span></div>
+      <div class="swatch"><div class="eyes"><span class="eye" style="background:#FFA000"></span><span class="eye" style="background:#FFA000"></span></div><b>Yellow</b><span>10 to 30 cm</span></div>
+      <div class="swatch"><div class="eyes"><span class="eye" style="background:#EF4444"></span><span class="eye" style="background:#EF4444"></span></div><b>Red</b><span>Closer than 10 cm</span></div>
+      <div class="swatch"><div class="eyes"><span class="eye" style="background:#3B82F6"></span><span class="eye" style="background:#3B82F6"></span></div><b>Blue</b><span>Nothing in range</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Connecting it</h2>
+    <figure>
+      <div class="plate"><img src="__G3__" alt="Back of the glowing sensor. The 4-pin white socket is labelled 5V, GND, SDA, SCL from left to right." loading="lazy"></div>
+      <figcaption>The sensor's socket is labeled 5V, GND, SDA, SCL. The board's I2C sockets use the same order, so Hiwonder's cable goes straight across.</figcaption>
+    </figure>
+    <ol class="steps">
+      <li><div class="step"><b>Power everything off.</b><span>Unplug USB, switch the board off, unplug the 6V adapter.</span></div></li>
+      <li><div class="step"><b>Plug the cable into the sensor's white socket.</b><span>It's keyed, so it fits one way only. Never force it.</span></div></li>
+      <li><div class="step"><b>Plug the other end into socket 4.</b><span>Socket 4 is the only I2C socket. It's on the side printed "Sound", next to LED2. <b>Never use socket 6</b>: its first pins are GND and servo voltage, which would reverse a sensor's power. Sockets 1–3 and 5 won't work for this sensor.</span></div></li>
+      <li><div class="step"><b>Power on with the 6V adapter and switch.</b><span>The sensor sockets get power from the board, not from USB. Check after 5 seconds that the sensor isn't hot.</span></div></li>
+      <li><div class="step"><b>Run the I2C scan.</b><span>Load <span class="pin">i2c-scan</span>. A <b>✓</b> means the sensor answered at address 0x77. An <b>✗</b> means nothing answered. It rescans every 3 seconds.</span></div></li>
+    </ol>
+    <div class="code">
+      <button class="copy" id="copy-scan-cmds" type="button">Copy commands</button>
+<pre><span class="k">cd</span> ~/Documents/GitHub/robotics-hiwonder/i2c-scan
+npx makecode build
+<span class="k">cp</span> -X built/binary.hex /Volumes/MICROBIT/</pre>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Scan shows</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td>✓ check mark</td><td>The sensor is connected. Load <span class="pin">glowing-distance-meter</span> and the eyes will light up.</td></tr>
+          <tr><td>✗ with the 6V adapter off</td><td>Plug in the adapter and switch the board on. The sensor has no power from USB alone.</td></tr>
+          <tr><td>✗ with the board powered</td><td>Power off, then press both plugs in firmly and check it's in socket 4. Scan again.</td></tr>
+          <tr class="danger"><td>✗ and the sensor gets hot</td><td>Switch off right away. Something is wired wrong or the sensor is damaged.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="part">Part 9</div>
+
+  <section>
+    <h2>Phone remote with an ESP32</h2>
+    <p>An ESP32 DevKit V1 makes its own Wi-Fi network with a control page for your phone, and passes your taps to the micro:bit over Bluetooth. No wires to the hand: the ESP32 only needs USB power, and its pins aren't used.</p>
+    <div class="code"><pre>Phone ──Wi-Fi──▶ ESP32 ──Bluetooth──▶ micro:bit ──▶ hand servos
+ (buttons, sliders)   (web page)          (hand-bluetooth)</pre></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Piece</th><th>Folder</th><th>Runs on</th></tr></thead>
+        <tbody>
+          <tr><td>Control page and Bluetooth link</td><td><span class="pin">esp32-hand-remote</span></td><td>ESP32</td></tr>
+          <tr><td>Command receiver that moves the hand</td><td><span class="pin">hand-bluetooth</span></td><td>micro:bit</td></tr>
+          <tr><td>First test: blink and "hello"</td><td><span class="pin">esp32-hello</span></td><td>ESP32</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Load the programs</h2>
+    <p>One-time setup on the Mac: <span class="pin">brew install arduino-cli</span>, then add ESP32 support (about 7.7 GB). The ESP32 appears as <span class="pin">/dev/cu.usbserial-0001</span> (its USB chip is a CP2102; no driver needed).</p>
+    <div class="code">
+      <button class="copy" id="copy-esp-cmds" type="button">Copy commands</button>
+<pre><span class="c"># micro:bit: the command receiver</span>
+<span class="k">cd</span> ~/Documents/GitHub/robotics-hiwonder/hand-bluetooth
+npx makecode build
+<span class="k">cp</span> -X built/binary.hex /Volumes/MICROBIT/
+
+<span class="c"># ESP32: the phone remote (needs the "huge app" memory layout)</span>
+<span class="k">cd</span> ~/Documents/GitHub/robotics-hiwonder
+arduino-cli compile --fqbn esp32:esp32:esp32:PartitionScheme=huge_app esp32-hand-remote
+arduino-cli upload  --fqbn esp32:esp32:esp32:PartitionScheme=huge_app -p /dev/cu.usbserial-0001 esp32-hand-remote</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>Use it</h2>
+    <ol class="steps">
+      <li><div class="step"><b>Power the hand.</b><span>6V adapter in, switch on. The micro:bit shows a smiley and the hand opens.</span></div></li>
+      <li><div class="step"><b>Power the ESP32.</b><span>USB from the Mac, a phone charger or a power bank. Rest it on its foam, never on metal.</span></div></li>
+      <li><div class="step"><b>Wait for the link.</b><span>The micro:bit shows a <b>✓</b> and the ESP32's blue light stays on.</span></div></li>
+      <li><div class="step"><b>Join the ESP32's Wi-Fi.</b><span>Network <span class="pin">uHandbit-Remote</span>, password <span class="pin">handbit123</span>. Stay connected if the phone warns there's no internet.</span></div></li>
+      <li><div class="step"><b>Open the control page.</b><span><span class="pin">http://192.168.4.1</span>: Fist, Open, Wave, Stop waving, Count 0–5, and a slider for each joint.</span></div></li>
+    </ol>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What happens</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td>Page says "Not connected to the hand"</td><td>Check the micro:bit is running hand-bluetooth and shows ✓. The ESP32 searches again every 5 seconds.</td></tr>
+          <tr><td>Page connected, but the hand doesn't move</td><td>The 6V adapter isn't powering the board. Plug it in and switch on.</td></tr>
+          <tr><td>micro:bit shows ✗</td><td>The Bluetooth link dropped. It reconnects by itself; move the ESP32 closer if it keeps dropping.</td></tr>
+          <tr><td>Can't find the Wi-Fi network</td><td>The ESP32 isn't powered or isn't running the remote. Re-upload esp32-hand-remote.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>Commands the micro:bit understands</b>, one per line: <span class="pin">F</span> fist, <span class="pin">O</span> open, <span class="pin">W</span> wave, <span class="pin">X</span> stop waving, <span class="pin">C 3</span> count three fingers, <span class="pin">S 3 90</span> set servo 3 to 90°. To change the Wi-Fi password, edit <span class="pin">AP_PASSWORD</span> at the top of esp32-hand-remote.ino and upload again.</p>
+  </section>
+
+  <div class="part">Part 10 · Not tested yet</div>
+
+  <section>
+    <h2>Option A: the ESP32 drives the servos directly</h2>
+    <p class="callout"><strong>Research notes, not a working setup</strong><span>Nothing in this part has been tried on the hand. Two things are still unknown: which messages the board accepts on its serial ports, and whether their signals are 5V (which would damage the ESP32). Don't wire anything until those are checked.</span></p>
+    <p>The micro:bit doesn't drive the servos itself. It sends short serial messages to a <b>helper chip</b> on the expansion board, and the helper chip moves the servos using the board's 6V power. An ESP32 could send the same messages and take the micro:bit's place, with only 2 or 3 wires.</p>
+  </section>
+
+  <section>
+    <h2>What's known</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Fact</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>The micro:bit talks to the helper chip at <b>115200 baud</b>, sending on pin P12 and listening on P8</td><td>StartbitV2 extension code</td></tr>
+          <tr><td>Move a servo: <span class="pin">55 55 08 03 01 timeL timeH servo posL posH</span>, position 500–2500 for 0–180°</td><td>StartbitV2 extension code</td></tr>
+          <tr><td>The helper chip replies with text like <span class="pin">A……$</span>, including the battery voltage</td><td>StartbitV2 extension code</td></tr>
+          <tr><td>Socket 5 is the helper chip's second serial port (5V, GND, RX2, TX2), meant "for a Wi-Fi module"</td><td>Hiwonder board schematic and notes</td></tr>
+          <tr><td>The "NC TX RX GND" socket next to socket 2 isn't documented anywhere</td><td>Hiwonder docs and product pages</td></tr>
+          <tr><td>The uHandbit's phone app uses the micro:bit's own Bluetooth, not these sockets</td><td>Hiwonder lessons and product images</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>What's unknown</h2>
+    <ol class="steps">
+      <li><div class="step"><b>Signal voltage.</b><span>If the helper chip's TX sends 5V, it can damage the ESP32, whose pins take 3.3V at most.</span></div></li>
+      <li><div class="step"><b>What socket 5 accepts.</b><span>It's documented for a Wi-Fi module. Whether the helper chip acts on servo messages arriving there, or only passes them on to the micro:bit, isn't documented.</span></div></li>
+      <li><div class="step"><b>Where the "NC TX RX GND" socket goes.</b><span>It might share the micro:bit's line, which would mean removing the micro:bit so the two don't talk at once.</span></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Safe test plan</h2>
+    <p>You'll need jumper wires, plus a multimeter or two resistors (10 kΩ and 20 kΩ).</p>
+    <ol class="steps">
+      <li><div class="step"><b>Measure first.</b><span>With the board on, measure the socket's TX pin against GND with a multimeter. About 3.3V is safe for the ESP32. About 5V needs the resistors.</span></div></li>
+      <li><div class="step"><b>Or protect the input anyway.</b><span>Wire the board's TX through 10 kΩ to ESP32 GPIO 16 (RX2), with 20 kΩ from GPIO 16 to GND. That turns 5V into a safe 3.3V.</span></div></li>
+      <li><div class="step"><b>Listen only.</b><span>Connect GND to GND and the board's TX to the ESP32's RX2, nothing else. Upload <span class="pin">esp32-lsc-test</span> and watch its USB output. Battery reports mean you've reached the helper chip.</span></div></li>
+      <li><div class="step"><b>Then send one command.</b><span>Remove the micro:bit, add ESP32 GPIO 17 (TX2) to the board's RX, and press the ESP32's BOOT button. The index finger should toggle between open and closed.</span></div></li>
+      <li><div class="step"><b>Never connect power pins.</b><span>The ESP32 stays on its own USB power. Only GND, TX and RX are connected, and never socket 6.</span></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>The test program</h2>
+    <p>This is <span class="pin">esp32-lsc-test/esp32-lsc-test.ino</span>. It compiles, but hasn't run on the board yet.</p>
+    <div class="code">
+      <button class="copy" id="copy-lsc" type="button">Copy code</button>
+<pre>// ESP32 DevKit V1: talk to the uHandbit board's servo controller directly (option A test).
+//
+// Step 1 (listen only): prints any messages the board's helper chip sends, such as its
+//   battery report "A&lt;p14&gt;&lt;sound&gt;&lt;volt&gt;$", to the Mac over USB.
+// Step 2 (only when you press the BOOT button): sends one servo command that toggles
+//   the index finger (servo 3) between open (130) and closed (0).
+//
+// Uses the ESP32's second serial port: RX2 = GPIO 16, TX2 = GPIO 17, 115200 baud.
+// Only connect these after the board's serial socket has been verified.
+
+const int RX2_PIN = 16;
+const int TX2_PIN = 17;
+const int BOOT_BUTTON = 0;
+const int LED_PIN = 2;
+
+bool fingerClosed = false;
+String incoming = "";
+
+// Hiwonder servo controller frame: 55 55 08 03 01 timeL timeH id posL posH
+// Position 500-2500 covers 0-180 degrees, the same as the micro:bit's StartbitV2 extension.
+void moveServo(uint8_t id, int angle, uint16_t ms) {
+  angle = constrain(angle, 0, 180);
+  uint16_t pos = 500 + (uint32_t)angle * 2000 / 180;
+  uint8_t frame[10] = {0x55, 0x55, 0x08, 0x03, 0x01,
+                       (uint8_t)(ms &amp; 0xff), (uint8_t)(ms &gt;&gt; 8),
+                       id, (uint8_t)(pos &amp; 0xff), (uint8_t)(pos &gt;&gt; 8)};
+  Serial2.write(frame, sizeof(frame));
+  Serial.printf("sent servo %d -&gt; %d degrees (pos %d)\n", id, angle, pos);
+}
+
+// "A" frames carry three 2-digit hex values; the last is battery voltage in units of 78.63 mV
+void reportFrame(const String &amp;frame) {
+  Serial.print("from board: ");
+  Serial.println(frame);
+  if (frame.length() == 7 &amp;&amp; frame.charAt(0) == 'A') {
+    long volt = strtol(frame.substring(5, 7).c_str(), nullptr, 16);
+    Serial.printf("  battery about %.2f V\n", volt * 78.63 / 1000.0);
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  Serial2.begin(115200, SERIAL_8N1, RX2_PIN, TX2_PIN);
+  pinMode(BOOT_BUTTON, INPUT_PULLUP);
+  pinMode(LED_PIN, OUTPUT);
+  Serial.println("listening to the board; press BOOT to toggle the index finger");
+}
+
+void loop() {
+  while (Serial2.available()) {
+    char c = (char)Serial2.read();
+    digitalWrite(LED_PIN, !digitalRead(LED_PIN));  // blink on every byte received
+    if (c == '$') {
+      reportFrame(incoming);
+      incoming = "";
+    } else if (incoming.length() &lt; 40) {
+      incoming += c;
+    }
+  }
+
+  if (digitalRead(BOOT_BUTTON) == LOW) {
+    fingerClosed = !fingerClosed;
+    moveServo(3, fingerClosed ? 0 : 130, 500);
+    delay(400);  // ignore the rest of this press
+    while (digitalRead(BOOT_BUTTON) == LOW) {
+      delay(10);
+    }
+  }
+}</pre>
+    </div>
+    <div class="code">
+      <button class="copy" id="copy-lsc-cmds" type="button">Copy commands</button>
+<pre><span class="k">cd</span> ~/Documents/GitHub/robotics-hiwonder
+arduino-cli compile --fqbn esp32:esp32:esp32 esp32-lsc-test
+arduino-cli upload  --fqbn esp32:esp32:esp32 -p /dev/cu.usbserial-0001 esp32-lsc-test</pre>
+    </div>
+  </section>
+
+  <div class="part">Part 11 · Not tested yet</div>
+
+  <section>
+    <h2>Option B: the ESP32 makes the servo signals itself</h2>
+    <p class="callout"><strong>Research notes, not a working setup</strong><span>Nothing in this part has been tried on the hand. It means unplugging the servos from the Hiwonder board and wiring your own power, which is where mistakes cost parts. Read all of it before connecting anything.</span></p>
+    <p>A servo is told where to go by a pulse every 20 ms: 0.5 ms means 0°, 2.5 ms means 180°. The ESP32 can make those pulses on six of its pins at once, so it can drive the hand with no micro:bit and no Hiwonder board. The catch is power: the ESP32 can't supply it, so the servos need their own.</p>
+  </section>
+
+  <section>
+    <h2>Option A or option B?</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>Option A (Part 10)</th><th>Option B (this part)</th></tr></thead>
+        <tbody>
+          <tr><td>Servo power</td><td>Hiwonder board, as now</td><td>Your own 6V supply</td></tr>
+          <tr><td>Servos stay plugged into the board</td><td>Yes</td><td>No, all six move to your wiring</td></tr>
+          <tr><td>Wires to the ESP32</td><td>2–3</td><td>7 (six signals + ground)</td></tr>
+          <tr><td>Main risk</td><td>Unknown signal voltage and protocol</td><td>Power wiring mistakes</td></tr>
+          <tr><td>Parts to buy</td><td>Maybe two resistors</td><td>Wiring for the supply, jumper wires, maybe a servo board</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>What you need</h2>
+    <ol class="steps">
+      <li><div class="step"><b>A 6V supply rated 5 A or more.</b><span>Each servo can draw one to two amps when it strains. The kit's 6V 5A adapter is the right size, with a barrel-jack-to-screw-terminal adapter so you can connect wires to it.</span></div></li>
+      <li><div class="step"><b>A way to connect six servo plugs.</b><span>A breadboard with pin headers, or a servo breakout board. Each servo plug has three wires: brown (ground), red (power), orange (signal).</span></div></li>
+      <li><div class="step"><b>Jumper wires</b> from the six signal lines and ground to the ESP32.</div></li>
+      <li><div class="step"><b>A large capacitor (recommended).</b><span>About 1000 µF, 16V or more, across the servo supply. It smooths the power when several servos start at once. Mind its polarity: the stripe side goes to GND.</span></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Wiring</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Wire</th><th>Goes to</th></tr></thead>
+        <tbody>
+          <tr class="danger"><td>Every servo's red (power)</td><td>Supply +6V. Never an ESP32 pin, not even VIN or 5V.</td></tr>
+          <tr><td>Every servo's brown (ground)</td><td>Supply GND</td></tr>
+          <tr><td>ESP32 GND</td><td>Supply GND too. Without this shared ground the signals don't work.</td></tr>
+          <tr><td>Servo 1 (wrist) orange</td><td>GPIO 13</td></tr>
+          <tr><td>Servo 2 (thumb) orange</td><td>GPIO 14</td></tr>
+          <tr><td>Servo 3 (index) orange</td><td>GPIO 27</td></tr>
+          <tr><td>Servo 4 (middle) orange</td><td>GPIO 26</td></tr>
+          <tr><td>Servo 5 (ring) orange</td><td>GPIO 25</td></tr>
+          <tr><td>Servo 6 (little) orange</td><td>GPIO 33</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>Pins chosen on purpose.</b> GPIO 13, 14, 25, 26, 27 and 33 are plain outputs. Avoid GPIO 0, 2, 12 and 15 (they affect how the ESP32 starts), 6–11 (its memory chip), 1 and 3 (the USB link), and 34–39 (inputs only). The ESP32 still runs from its own USB power.</p>
+    <p class="note"><b>Unverified: 3.3V signals.</b> The ESP32's signal pins give 3.3V. Most hobby servos accept that, but the LD-1501MG's minimum isn't documented. If a servo jitters or ignores commands, add a small logic-level shifter between the ESP32 and the signal wires.</p>
+  </section>
+
+  <section>
+    <h2>Easier variant: a servo driver board</h2>
+    <p>A <b>PCA9685</b> 16-channel servo board (a few dollars) takes most of the wiring off your hands. The servo plugs fit its three-pin headers directly, the 6V supply goes into its screw terminal, and the ESP32 connects with four wires: 3.3V, GND, SDA (GPIO 21) and SCL (GPIO 22). The board makes the pulses itself. It needs the Adafruit PWM Servo Driver library and a small change to the program.</p>
+  </section>
+
+  <section>
+    <h2>Safe test plan</h2>
+    <ol class="steps">
+      <li><div class="step"><b>One servo first.</b><span>Wire only the index finger (servo 3) and the grounds. Power the ESP32 by USB, then switch on the 6V supply.</span></div></li>
+      <li><div class="step"><b>Expect a jump at power-on.</b><span>When the signal starts, each servo goes straight to its start position: hand open, wrist at 90°. Keep your fingers clear.</span></div></li>
+      <li><div class="step"><b>Use the sliders gently.</b><span>Join <span class="pin">uHandbit-Direct</span>, open 192.168.4.1, and move the index slider. The program moves at about 150° per second so nothing snaps.</span></div></li>
+      <li><div class="step"><b>Feel for heat, listen for buzzing.</b><span>A servo that buzzes or warms up at rest is pushing against a stop. Switch off and adjust the angle limits.</span></div></li>
+      <li><div class="step"><b>Then add the other five.</b><span>One at a time, checking each before the next.</span></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>The program</h2>
+    <p>This is <span class="pin">esp32-direct-servos/esp32-direct-servos.ino</span>, shown without the long control-page text it shares with the Bluetooth remote. It compiles, but hasn't run on the hand yet.</p>
+    <div class="code">
+      <button class="copy" id="copy-direct" type="button">Copy code</button>
+<pre>// uHandbit option B: the ESP32 drives the six servos directly (no micro:bit, no Hiwonder board).
+// NOT TESTED ON THE HAND YET. Read the wiring notes on the guide page before connecting anything.
+//
+// The ESP32 makes its own Wi-Fi network. Join it from your phone and open http://192.168.4.1
+// The page is the same as the Bluetooth remote, but here the ESP32 moves the servos itself.
+//
+// Wiring (servo cable colors):
+//   brown (ground) -&gt; servo power supply GND, and ESP32 GND
+//   red (power)    -&gt; servo power supply +6V   (NEVER the ESP32's pins)
+//   orange (signal)-&gt; ESP32 pin from SERVO_PINS below
+
+#include &lt;WiFi.h&gt;
+#include &lt;WebServer.h&gt;
+
+const char *AP_NAME = "uHandbit-Direct";
+const char *AP_PASSWORD = "handbit123";
+
+// Servo 1 wrist, 2 thumb, 3 index, 4 middle, 5 ring, 6 little.
+// These pins are safe general-purpose outputs on the DevKit V1 (no boot or flash pins).
+const int SERVO_PINS[7] = {-1, 13, 14, 27, 26, 25, 33};
+
+// Angles confirmed on this hand: fingers 0 = closed, 130 = open; thumb 140 = closed, 0 = open
+const int FINGER_CLOSED = 0, FINGER_OPEN = 130, THUMB_CLOSED = 140, THUMB_OPEN = 0;
+const int COUNT_SERVOS[5] = {3, 4, 5, 6, 2};
+const int COUNT_OPEN[5] = {130, 130, 130, 130, 0};
+const int COUNT_CLOSED[5] = {0, 0, 0, 0, 140};
+
+// Start positions: open hand, wrist in the middle
+float current[7] = {0, 90, THUMB_OPEN, FINGER_OPEN, FINGER_OPEN, FINGER_OPEN, FINGER_OPEN};
+int target[7] = {0, 90, THUMB_OPEN, FINGER_OPEN, FINGER_OPEN, FINGER_OPEN, FINGER_OPEN};
+const float STEP_DEGREES = 3.0;  // per 20 ms, about 150 degrees per second, so moves aren't violent
+
+bool waving = false;
+unsigned long lastStep = 0, lastWave = 0;
+bool waveLeft = false;
+
+WebServer server(80);
+
+// 50 Hz servo signal with 14-bit resolution: 20 ms period = 16384 steps
+void writeServo(int servo, float angle) {
+  int us = 500 + (int)(constrain(angle, 0, 180) * 2000 / 180);  // same 500-2500 us range as Hiwonder
+  ledcWrite(SERVO_PINS[servo], (uint32_t)us * 16384 / 20000);
+}
+
+void setTarget(int servo, int angle) {
+  if (servo &gt;= 1 &amp;&amp; servo &lt;= 6) {
+    target[servo] = constrain(angle, 0, 180);
+  }
+}
+
+bool handle(const String &amp;line) {
+  char cmd = line.charAt(0);
+  if (cmd == 'F') {
+    waving = false;
+    for (int s = 3; s &lt;= 6; s++) setTarget(s, FINGER_CLOSED);
+    setTarget(2, THUMB_CLOSED);
+  } else if (cmd == 'O') {
+    waving = false;
+    setTarget(2, THUMB_OPEN);
+    for (int s = 3; s &lt;= 6; s++) setTarget(s, FINGER_OPEN);
+  } else if (cmd == 'W') {
+    waving = true;
+  } else if (cmd == 'X') {
+    waving = false;
+  } else if (cmd == 'C') {
+    waving = false;
+    int n = constrain(line.substring(2).toInt(), 0, 5);
+    for (int i = 0; i &lt; 5; i++) setTarget(COUNT_SERVOS[i], i &lt; n ? COUNT_OPEN[i] : COUNT_CLOSED[i]);
+  } else if (cmd == 'S') {
+    int space = line.indexOf(' ', 2);
+    if (space &lt; 0) return false;
+    int servo = line.substring(2, space).toInt();
+    if (servo == 1) waving = false;
+    setTarget(servo, line.substring(space + 1).toInt());
+  } else {
+    return false;
+  }
+  return true;
+}
+
+const char PAGE[] PROGMEM = R"HTML(... the same phone page as esp32-hand-remote ...)HTML";
+
+void handleRoot() {
+  server.send_P(200, "text/html", PAGE);
+}
+
+void handleCmd() {
+  String c = server.arg("c");
+  if (c.length() == 0 || c.length() &gt; 12) {
+    server.send(400, "text/plain", "bad command");
+    return;
+  }
+  server.send(200, "text/plain", handle(c) ? "ok" : "bad command");
+}
+
+void handleStatus() {
+  server.send(200, "application/json", "{\"connected\":true,\"name\":\"direct servos (ESP32)\"}");
+}
+
+void setup() {
+  Serial.begin(115200);
+  for (int s = 1; s &lt;= 6; s++) {
+    ledcAttach(SERVO_PINS[s], 50, 14);
+    writeServo(s, current[s]);
+  }
+  WiFi.softAP(AP_NAME, AP_PASSWORD);
+  Serial.print("Wi-Fi network ");
+  Serial.print(AP_NAME);
+  Serial.print(" ready. Open http://");
+  Serial.println(WiFi.softAPIP());
+  server.on("/", handleRoot);
+  server.on("/cmd", handleCmd);
+  server.on("/status", handleStatus);
+  server.begin();
+}
+
+void loop() {
+  server.handleClient();
+  unsigned long now = millis();
+
+  // Wrist wave: swing between 0 and 180 every second
+  if (waving &amp;&amp; now - lastWave &gt; 1000) {
+    waveLeft = !waveLeft;
+    target[1] = waveLeft ? 0 : 180;
+    lastWave = now;
+  }
+
+  // Move every servo a small step toward its target every 20 ms
+  if (now - lastStep &gt;= 20) {
+    lastStep = now;
+    for (int s = 1; s &lt;= 6; s++) {
+      float diff = target[s] - current[s];
+      if (diff != 0) {
+        current[s] += constrain(diff, -STEP_DEGREES, STEP_DEGREES);
+        writeServo(s, current[s]);
+      }
+    }
+  }
+}</pre>
+    </div>
+    <div class="code">
+      <button class="copy" id="copy-direct-cmds" type="button">Copy commands</button>
+<pre><span class="k">cd</span> ~/Documents/GitHub/robotics-hiwonder
+arduino-cli compile --fqbn esp32:esp32:esp32 esp32-direct-servos
+arduino-cli upload  --fqbn esp32:esp32:esp32 -p /dev/cu.usbserial-0001 esp32-direct-servos</pre>
+    </div>
+    <p class="note"><b>Copying this code by hand?</b> Copy the full file from the <span class="pin">esp32-direct-servos</span> folder instead. The version above leaves out the phone page to keep this guide readable.</p>
+  </section>
+
+  <div class="part">Reference</div>
+
+  <section>
+    <h2>Your board's sensor sockets</h2>
+    <p>From Hiwonder's schematic for this board and the printing on its back. The photos above are from a similar Hiwonder board and label things differently, so go by this table.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Socket</th><th>Pins, in order</th><th>Use it for</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>5V, GND, P1, P2</td><td>Trigger/echo ultrasonic, simple sensors</td></tr>
+          <tr><td>2</td><td>5V, GND, P13, P14</td><td>Trigger/echo ultrasonic (Hiwonder's choice), simple sensors</td></tr>
+          <tr><td>3</td><td>5V, GND, P14 (analog), P16</td><td>Analog sensors</td></tr>
+          <tr><td>4</td><td>5V, GND, SDA, SCL</td><td>I2C: color sensor, glowing ultrasonic</td></tr>
+          <tr><td>5</td><td>5V, GND, RX2, TX2</td><td>Serial port on the board's helper chip (for a Wi-Fi module)</td></tr>
+          <tr class="danger"><td>6</td><td>GND, servo voltage, RX3, TX3</td><td>Bus servos only. Never plug a sensor in here: its power would be reversed.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Know the board</h2>
+    <figure>
+      <div class="plate"><img src="__IMG9__" alt="The Hiwonder micro:bit expansion board seen from above, with green numbered labels 1 to 10 pointing to its parts." width="1323" height="1022"></div>
+      <figcaption>Labels from Hiwonder's documentation. Numbers match the list below.</figcaption>
+    </figure>
+    <ul class="legend">
+      <li><span class="n">1</span><span>RGB lights</span></li>
+      <li><span class="n">6</span><span>Motor ports</span></li>
+      <li><span class="n">2</span><span>Serial port</span></li>
+      <li><span class="n">7</span><span class="hot">Servo ports: the hand's finger and wrist motors plug in here</span></li>
+      <li><span class="n">3</span><span class="hot">micro:bit slot: this is where it goes</span></li>
+      <li><span class="n">8</span><span class="hot">Power switch</span></li>
+      <li><span class="n">4</span><span>Sensor ports (on your board only socket 4 is I2C, see the table above)</span></li>
+      <li><span class="n">9</span><span class="hot">DC power jack: the 6V adapter plugs in here</span></li>
+      <li><span class="n">5</span><span>Power output</span></li>
+      <li><span class="n">10</span><span>IO ports for extra sensors</span></li>
+    </ul>
+    <p class="note"><b>Your board may look a little different.</b> These pictures come from Hiwonder's AiHand kit, their other micro:bit hand. The uHandbit's board can have a different layout or labels, but the micro:bit goes into the slot the same way. If your board's labels don't match, go by the printed text on your own board.</p>
+  </section>
+
+  <footer>
+    Images: <a href="https://docs.hiwonder.com/projects/AiHand/en/latest/docs/2.Introduction_to_microbitand_Expansion_Board.html">Hiwonder AiHand docs, Introduction to micro:bit and Expansion Board</a>. Project files: <span class="pin">robotics-hiwonder/waving-hand</span>, <span class="pin">robotics-hiwonder/fist-open</span>, <span class="pin">robotics-hiwonder/finger-counting</span>, <span class="pin">robotics-hiwonder/rock-paper-scissors</span> and <span class="pin">robotics-hiwonder/clap-to-grab</span>.
+  </footer>
+</div>
+<script>
+  document.querySelectorAll(".code").forEach(function (box) {
+    var btn = box.querySelector(".copy");
+    var code = box.querySelector("pre");
+    btn.addEventListener("click", function () {
+      function selectIt() {
+        var r = document.createRange(); r.selectNodeContents(code);
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        btn.textContent = "Selected: press ⌘C";
+      }
+      try {
+        navigator.clipboard.writeText(code.textContent).then(function () {
+          btn.textContent = "Copied";
+          setTimeout(function () { btn.textContent = "Copy code"; }, 2000);
+        }, selectIt);
+      } catch (e) { selectIt(); }
+    });
+  });
+</script>

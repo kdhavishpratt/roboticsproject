@@ -1,0 +1,17 @@
+{
+    "name": "distance-meter",
+    "description": "uHandbit: show the plain ultrasonic sensor's distance in cm",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "microphone": "*"
+    },
+    "files": [
+        "main.ts",
+        "README.md"
+    ],
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "tsprj"
+}

@@ -1,0 +1,18 @@
+{
+    "name": "glowing-distance-meter",
+    "description": "uHandbit: distance in cm from Hiwonder's glowing ultrasonic sensor, with color-changing eyes",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "microphone": "*",
+        "RGBSonar": "github:Hiwonder/RGBSonar#v0.0.3"
+    },
+    "files": [
+        "main.ts",
+        "README.md"
+    ],
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "tsprj"
+}

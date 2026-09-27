@@ -1,0 +1,17 @@
+{
+    "name": "i2c-scan",
+    "description": "uHandbit: list the I2C devices connected to the board",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "microphone": "*"
+    },
+    "files": [
+        "main.ts",
+        "README.md"
+    ],
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "tsprj"
+}

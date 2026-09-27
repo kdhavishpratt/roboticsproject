@@ -1,0 +1,14 @@
+# MakeCode build output (recreated by `npx makecode build`)
+built/
+pxt_modules/
+node_modules/
+.mkc/
+
+# Arduino build output
+build/
+
+# Generated guide page (rebuild with docs/guide/build.py)
+docs/guide/guide.html
+
+# macOS
+.DS_Store
